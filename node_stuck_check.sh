@@ -1,3 +1,5 @@
+#!/bin/bash
+
 while true
 do
 RED='\033[0;31m'
