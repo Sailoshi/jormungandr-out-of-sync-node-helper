@@ -1,5 +1,3 @@
-#!/bin/bash
-
 while true
 do
 RED='\033[0;31m'
@@ -12,10 +10,15 @@ shelleyExplorerJson=`curl -X POST -H "Content-Type: application/json" --data '{"
 shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -o '"chainLength":"[^"]*' | cut -d'"' -f4`
 
 alphaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
-maximumBlockAlphaCount=2
+maximumBlockAlphaCount=5
 
-if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || alphaBlockCount < $((-maximumBlockAlphaCount - 1)) ]]; then
+echo "LastBlockCount: " $lastBlockCount
+echo "LastShellyBlock: " $shelleyLastBlockCount
+echo "AlphaCount: " $alphaBlockCount
+
+if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || alphaBlockCount > maximumBlockAlphaCount ]]; then
  echo -e ${RED}"Block was not found within main chain. Please restart your node and remove your current chain cache."${NC}
+ echo "Node is out of sync " $lastBlockCount >> logs/node-checker-warnings.out
  exit
 fi
 
