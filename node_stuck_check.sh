@@ -9,14 +9,14 @@ lastBlockCount=`stats | head -n 7 | tail -n 1 | awk '{print $2}' | tr -d \"`
 shelleyExplorerJson=`curl -X POST -H "Content-Type: application/json" --data '{"query":" query { block (id:\"'$lastBlockHash'\") { id date { slot epoch { id firstBlock { id } lastBlock { id } totalBlocks } } transactions { totalCount edges { node { id block { id date { slot epoch { id firstBlock { id } lastBlock { id } totalBlocks } } leader { __typename ... on Pool { id blocks { totalCount } registration { startValidity managementThreshold owners operators rewards { fixed ratio { numerator denominator } maxLimit } rewardAccount { id } } } } } inputs { amount address { id } } outputs { amount address { id } } } cursor } } previousBlock { id } chainLength leader { __typename ... on Pool { id blocks { totalCount } registration { startValidity managementThreshold owners operators rewards { fixed ratio { numerator denominator } maxLimit } rewardAccount { id } } } } } } "}' https://explorer.incentivized-testnet.iohkdev.io/explorer/graphql`
 shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -o '"chainLength":"[^"]*' | cut -d'"' -f4`
 
-alphaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
-maximumBlockAlphaCount=5
+deltaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
+maximumBlockDeltaCount=5
 
 echo "LastBlockCount: " $lastBlockCount
 echo "LastShellyBlock: " $shelleyLastBlockCount
-echo "AlphaCount: " $alphaBlockCount
+echo "DeltaCount: " $deltaBlockCount
 
-if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || alphaBlockCount > maximumBlockAlphaCount ]]; then
+if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || deltaBlockCount > maximumBlockDeltaCount ]]; then
  echo -e ${RED}"Block was not found within main chain. Please restart your node and remove your current chain cache."${NC}
  echo "Node is out of sync " $lastBlockCount >> logs/node-checker-warnings.out
  exit
