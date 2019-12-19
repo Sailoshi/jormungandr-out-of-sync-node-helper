@@ -18,14 +18,16 @@ echo "DeltaCount: " $deltaBlockCount
 
 if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || deltaBlockCount > maximumBlockDeltaCount ]]; then
  echo -e ${RED}"Block was not found within main chain. Please restart your node and remove your current chain cache."${NC}
- echo "Node is out of sync " $lastBlockCount >> logs/node-checker-warnings.out
- exit
-fi
-
-# If you want to restart your node when the blockchain is out of sync, please remove the following uncomments.
+ echo "Node is out of sync at block " $lastBlockCount >> logs/node-checker-warnings.out
+# echo "Trying to restart the node..."
+ ### If you want to restart your node when the blockchain is out of sync, please remove the following uncomments.
+ ### And remove/uncomment the exit command.
 # stop
 # rm -r ./mnt
 # start_leader
+# sleep 120 
+ exit
+fi
 
 sleep 300
 done
