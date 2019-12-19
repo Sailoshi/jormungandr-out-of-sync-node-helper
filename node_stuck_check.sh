@@ -13,7 +13,7 @@ deltaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
 maximumBlockDeltaCount=5
 
 echo "LastBlockCount: " $lastBlockCount
-echo "LastShellyBlock: " $shelleyLastBlockCount
+echo "LastShelleyBlock: " $shelleyLastBlockCount
 echo "DeltaCount: " $deltaBlockCount
 
 if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || deltaBlockCount > maximumBlockDeltaCount ]]; then
