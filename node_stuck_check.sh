@@ -17,7 +17,7 @@ do
       shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -m 1 -o '"chainLength":"[^"]*' | cut -d'"' -f4 | awk '{print $NF}'`
       shelleyLastBlockCount=`echo $shelleyLastBlockCount|cut -d ' ' -f3`
       deltaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
-      if [[ $deltaBlockCount < $deltaMax ]]; then
+      if [[ $deltaBlockCount < $deltaMax && ! -z $shelleyLastBlockCount ]]; then
          break
       fi
       counter=$(($counter+1))
