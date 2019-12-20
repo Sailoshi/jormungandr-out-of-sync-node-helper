@@ -28,7 +28,7 @@ do
  echo "LastBlockCount: " $lastBlockCount
  echo "LastShelleyBlock: "  $shelleyLastBlockCount
  echo "DeltaCount: " $deltaBlockCount
- if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || deltaBlockCount > deltaMax ]]; then
+ if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || $deltaBlockCount > $deltaMax ]]; then
      echo -e ${RED}"Block was not found within main chain. Please restart your node and remove your current chain cache."${NC}
      echo "Node was out of sync at block "
      $lastBlockCount >> logs/node-checker-warnings.out
