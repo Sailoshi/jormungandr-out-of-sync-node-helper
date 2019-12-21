@@ -28,19 +28,27 @@ do
  done  
 
  echo "LastBlockCount: " $lastBlockCount
- echo "LastShelleyBlock: "  $shelleyLastBlockCount
+ echo "LastShelleyBlock: " $shelleyLastBlockCount
  echo "DeltaCount: " $deltaBlockCount
 
  if [[ $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || $deltaBlockCount -gt $deltaMax ]]; then
-     echo -e ${RED}"Block was not found within main chain. Please restart your node and remove your current chain cache."${NC}
-     echo "Node was out of sync at block "
-     $lastBlockCount >> logs/node-checker-warnings.out
-     echo "Trying to restart the node..."
+     now=$(date +"%r")
+     echo -e ${RED}$now": Block was not found within main chain. Your node will be automatically restarted."${NC}
+     echo $now": Your node was out of sync at block $lastBlockCount. Trying to restart." >> logs/node-checker-warnings.out
+     echo $now": Trying to restart the node..."
      stop
      rm -r mnt
-     start_leader
+     start_leader     
      sleep 180
+     lastBlockHash=`stats | head -n 6 | tail -n 1 | awk '{print $2}'`
+     now=$(date +"%r")
+     if [[ ! -z $lastBlockHash ]]; then
+        echo -e ${GREEN}"$now: Old storage files were removed and node was restarted successfully. Next check in 15 minutes again"${NC}
+        echo -e ${GREEN}"$now: Your node was restarted successfully." >> logs/node-checker-warnings.out${NC}
+     fi
+ else
+     echo -e ${GREEN}$now": Last check was good. Next check in 15 minutes again"${NC}
  fi
- echo -e ${GREEN}"Last check was good. Next check in 15 minutes again"${NC}
+ 
  sleep 900
 done
