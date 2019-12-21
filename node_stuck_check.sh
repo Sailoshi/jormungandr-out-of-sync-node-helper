@@ -44,7 +44,7 @@ do
      now=$(date +"%r")
      if [[ ! -z $lastBlockHash ]]; then
         echo -e ${GREEN}"$now: Old storage files were removed and node was restarted successfully. Next check in 15 minutes again"${NC}
-        echo -e ${GREEN}"$now: Your node was restarted successfully." >> logs/node-checker-warnings.out${NC}
+        echo "$now: Your node was restarted successfully." >> logs/node-checker-warnings.out
      fi
  else
      echo -e ${GREEN}$now": Last check was good. Next check in 15 minutes again"${NC}
