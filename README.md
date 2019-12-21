@@ -4,9 +4,15 @@ A shell script which checks every 5 minutes if your cardano jormungandr node is 
 The script uses functions of @Chris-Graffagnino (thx)
 https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md
 
-I recommend to start the script like:
- ./node_stuck_check.sh &> stucker_running.out &
-
+I recommend to start the script like: <br/>
+ <b>./node_stuck_check.sh &> stucker_running.out &</b>
+ <br/>
+ <br/>
+ To stop, you need to kill the process.
+ <br/>
+ <br/>
+ If you want to monitor the script just write <b>tail -f stucker_running.out</b>
+ <br/>
   error logs will be written to logs/node-checker-warnings.out
 
 <h3>If you like my work, a coffee would be great. Feel free :)</h3>
