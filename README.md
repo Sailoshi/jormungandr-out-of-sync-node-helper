@@ -7,6 +7,8 @@ https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jorm
 I recommend to start the script like: <br/>
  <b>./node_stuck_check.sh &> stucker_running.out &</b>
  <br/>
+ If the script is terminating after you close your shell, than run it by using <b> nohup ./<script.sh> &> ... &</b>
+ <br/>
  <br/>
  To stop, you need to kill the process.
  <br/>
