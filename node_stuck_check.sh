@@ -7,11 +7,11 @@ do
  NC='\033[0m' # No Color
  . ~/.bash_profile
 
- lastBlockHash=`stats | head -n 6 | tail -n 1 | awk '{print $2}'` 
+ lastBlockHash=`stats | head -n 6 | tail -n 1 | awk '{print $2}'`
  lastBlockCount=`stats | head -n 7 | tail -n 1 | awk '{print $2}' | tr -d \"`
  sleep 5
  tries=10
- deltaMax=10
+ deltaMax=25
  counter=0
  bootstrapCounter=0
  while [[ $counter -le $tries ]]
@@ -20,7 +20,7 @@ do
       shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -m 1 -o '"chainLength":"[^"]*' | cut -d'"' -f4 | awk '{print $NF}'`
       shelleyLastBlockCount=`echo $shelleyLastBlockCount|cut -d ' ' -f3`
       deltaBlockCount=0
-      isNumberRegex=^[0-9]+$
+      isNumberRegex='^[0-9]+$'
       if [[ $lastBlockCount =~ $isNumberRegex ]];
       then
         deltaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
@@ -31,13 +31,13 @@ do
       counter=$(($counter+1))
       echo "INVALID RESULT. RETRYING..."
       sleep 3
- done  
+ done
 
  echo "LastBlockCount: " $lastBlockCount
  echo "LastShelleyBlock: " $shelleyLastBlockCount
  echo "DeltaCount: " $deltaBlockCount
  echo $initial
- while [[ $bootstrapCounter -le $tries && ! initial ]] 
+ while [[ $bootstrapCounter -le $tries && ! initial ]]
  do
 
      lastBlockCount=`stats | head -n 7 | tail -n 1 | awk '{print $2}' | tr -d \"`
@@ -60,8 +60,8 @@ do
      stop
      sleep 5
      kill $(ps -aux | grep "jormungandr --config" | awk 'NR==1{print $2}')
-     rm -r mnt
-     start_leader     
+     #rm -r mnt
+     start_leader
      sleep 180
      lastBlockHash=$(stats | head -n 6 | tail -n 1 | awk '{print $2}')
      now=$(date +"%r")
@@ -71,7 +71,7 @@ do
      fi
  else
      echo -e ${GREEN}$now": Last check was good. Next check in 15 minutes again"${NC}
-     ./sendmytip.sh &> /dev/null
+     ./sendmytip.sh >> /dev/null
  fi
  initial=false
  sleep 900
